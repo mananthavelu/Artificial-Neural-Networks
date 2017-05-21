@@ -1,19 +1,12 @@
 clear
 clc
 close all
-% With Noise
-%
-
 
 %%%%%%%%%%%
 %algorlm.m
-% A script comparing performance of different algorithms
+% A script comparing performance of 'trainlm' and 'traingd'
 % traingd - batch gradient descent 
 % trainlm - Levenberg - Marquardt
-% traingda
-% traincgf
-% traincgp
-% trainbfg
 %%%%%%%%%%%
 
 %generation of examples and targets
@@ -26,7 +19,7 @@ p=con2seq(x); t=con2seq(y); % convert the data to a useful format
 
 %creation of networks
 
-net1=feedforwardnet(20,'trainbr');
+net1=feedforwardnet(20,'trainlm');
 net2=feedforwardnet(20,'traingd');
 net3=feedforwardnet(20,'traingda');
 net4=feedforwardnet(20,'traincgf');

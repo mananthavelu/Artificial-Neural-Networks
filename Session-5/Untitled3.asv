@@ -1,0 +1,27 @@
+% load('Data_Problem1_regression.mat');
+
+ %r0652832
+ %d1=8; d2=6; d3=5; d4=3; d5=2;
+ %Tnew = (d1*T1 + d2*T2 + d3*T3 + d4*T4 + d5*T5)/(d1 + d2 + d3 + d4 + d5);
+ 
+ function [X1,X2,T,trainIdx,valIdx,testIdx,Xdata,Tdata] = createDataset()
+    data=load('Data_Problem1_regression.mat');
+    X1 = data.X1;
+    X2 = data.X2;
+    sno = sort([0,6,5,2,8,3,2],'descend');
+    digits = sno(1:5);
+    T=(sum(bsxfun(@times,[data.T1 data.T2 data.T3 data.T4 data.T5],digits),2)/sum(digits));
+    N = max(size(T));
+    trainIdx = randsample(N,1000);
+    valIdx = randsample(N,1000);
+    testIdx = randsample(N,1000);
+    
+    Xdata = [X1(trainIdx) X2(trainIdx);X1(valIdx) X2(valIdx);X1(testIdx) X2(testIdx)]';
+    Tdata = [T(trainIdx);T(valIdx);T(testIdx)]';
+ end
+ 
+ net=feedforwardnet(10, 'traingd');
+ net.trainParam.epochs=100;
+ net=train(net, trainIdx', ');
+ op = sim(net,validationset);
+ error = mse(testset, op');
