@@ -15,6 +15,10 @@ x=0:0.2:4*pi;
 y=sin(x);
 p=con2seq(x); t=con2seq(y); % convert the data to a useful format
 
+%Adding noise data
+noise_y = awgn(y,10,'measured');
+noise_t=con2seq(noise_y);
+
 xtest=0.01:0.2:4*pi;
 ytest=sin(x);
 xtest1=con2seq(xtest); ytest1=con2seq(ytest);
@@ -40,15 +44,15 @@ net3.trainParam.epochs=1;
 
 %train the networks
 tic
-net1=train(net1,p,t);   
+net1=train(net1,p,noise_t);   
 net1_time_1=toc;
 
 tic
-net2=train(net2,p,t);
+net2=train(net2,p,noise_t);
 net2_time_1=toc;
 
 tic
-net3=train(net3,p,t);
+net3=train(net3,p,noise_t);
 net3_time_1=toc;
 
 training_time_1=[net1_time_1,net2_time_1,net3_time_1];
@@ -60,15 +64,15 @@ net2.trainParam.epochs=14;
 net3.trainParam.epochs=14;
 
 tic
-net1=train(net1,p,t);
+net1=train(net1,p,noise_t);
 net1_time_14=toc;
 
 tic
-net2=train(net2,p,t);
+net2=train(net2,p,noise_t);
 net2_time_14=toc;
 
 tic
-net3=train(net3,p,t);
+net3=train(net3,p,noise_t);
 net3_time_14=toc;
 
 training_time_14=[net1_time_14,net2_time_14,net3_time_14];
@@ -80,19 +84,19 @@ net2.trainParam.epochs=985;
 net3.trainParam.epochs=985;
 
 tic
-[net1,tr]=train(net1,p,t);
+[net1,tr]=train(net1,p,noise_t);
 net1_time_985=toc;
 mse_1_985=tr.perf;
 len_1_985=length(mse_1_985);
 
 tic
-[net2, tr]=train(net2,p,t);
+[net2, tr]=train(net2,p,noise_t);
 net2_time_985=toc;
 mse_2_985=tr.perf;
 len_2_985=length(mse_2_985);
 
 tic
-[net3,tr]=train(net3,p,t);
+[net3,tr]=train(net3,p,noise_t);
 net3_time_985=toc;
 mse_3_985=tr.perf;
 len_3_985=length(mse_3_985);
@@ -108,19 +112,19 @@ a13=sim(net1,xtest1); a23=sim(net2,xtest1);a33=sim(net3,xtest1);
 % Curve fitting plots
 f1=figure;
 subplot(3,2,1);
-plot(x,y,'bx',xtest,cell2mat(a11),'r',xtest,cell2mat(a21),'g',xtest,cell2mat(a31),'y'); % plot the sine function and the output of the networks
+plot(x,y,'bx',x,noise_y,'c',xtest,cell2mat(a11),'r',xtest,cell2mat(a21),'g',xtest,cell2mat(a31),'y'); % plot the sine function and the output of the networks
 title('1 epoch');
-legend('target','trainlm','traingd','trainbfg');
+legend('target','noisy target','trainlm','traingd','trainbfg');
 
 subplot(3,2,3); 
-plot(x,y,'bx',xtest,cell2mat(a12),'r',xtest,cell2mat(a22),'g',xtest,cell2mat(a32),'y');
+plot(x,y,'bx',x,noise_y,'c',xtest,cell2mat(a12),'r',xtest,cell2mat(a22),'g',xtest,cell2mat(a32),'y');
 title('15 epochs');
-legend('target','trainlm','traingd','trainbfg');
+legend('target','noisy target','trainlm','traingd','trainbfg');
 
 subplot(3,2,5);
-plot(x,y,'bx',xtest,cell2mat(a13),'r',xtest,cell2mat(a23),'g',xtest,cell2mat(a33),'y');
+plot(x,y,'bx',x,noise_y,'c',xtest,cell2mat(a13),'r',xtest,cell2mat(a23),'g',xtest,cell2mat(a33),'y');
 title('1000 epochs');
-legend('target','trainlm','traingd','trainbfg');
+legend('target','noisy target','trainlm','traingd','trainbfg');
 xlabel('Input values - p','FontSize',10)
 
 % R Value plots

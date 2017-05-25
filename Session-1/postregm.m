@@ -83,7 +83,7 @@ lly = (1-alpha)*v(4) + alpha*v(3);
 index = fix(Q/2);
 title(['Best Linear Fit:  A = (',num2str(m,3),') T + (', num2str(b,3), ')']);
 text(llx,lly,['R = ', num2str(r,3)]);
-legend('Data Points','A = T','Best Linear Fit');
-legend('Data Points',strcat('A (',num2str(m,3),') T + (', num2str(b,3), ')'),'Best Linear Fit');
+%legend('Data Points','A = T','Best Linear Fit');
+%legend('Data Points',strcat('A (',num2str(m,3),') T + (', num2str(b,3), ')'),'Best Linear Fit');
 
 hold off

@@ -44,6 +44,7 @@ for k=1:n
         end
     end
 end
+
 figure
 % subplot(3,1,2);
 surf(w1,w2,posterior)
@@ -76,6 +77,7 @@ for k=1:n
     end
 end
 figure
+
 % subplot(3,1,3);
 surf(w1,w2,posterior)
 grid on

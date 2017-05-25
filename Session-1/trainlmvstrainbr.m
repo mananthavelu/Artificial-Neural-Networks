@@ -4,9 +4,8 @@ close all
 % Without noise
 %%%%%%%%%%%
 % A script comparing performance of different algorithms
-% traingd - batch gradient descent 
-% trainlm - Levenberg - Marquardt
-% trainbfg -BFGS quasi newton algorithm
+% % trainlm - Levenberg - Marquardt
+% trainbr -BFGS quasi newton algorithm
 %%%%%%%%%%%
 
 %generation of examples and targets
@@ -21,22 +20,20 @@ xtest1=con2seq(xtest); ytest1=con2seq(ytest);
 %creation of networks
 
 net1=feedforwardnet(20,'trainlm');
-net2=feedforwardnet(20,'traingd');
-net3=feedforwardnet(20,'trainbfg');
+net2=feedforwardnet(20,'trainbr');
 
 %setting the same weights for all the networks
-[net1.iw{1,1},net2.iw{1,1}]=deal(net3.iw{1,1});   
-[net1.iw{2,1},net2.iw{2,1}]=deal(net3.iw{2,1});
+net1.iw{1,1}=deal(net2.iw{1,1});   
+net1.iw{2,1}=deal(net2.iw{2,1});
 
 %setting the same weights for all the networks
-[net1.b{1},net2.b{1}]=deal(net3.b{1}); 
-[net1.b{2},net2.b{2}]=deal(net3.b{2});
+net1.b{1}=deal(net2.b{1}); 
+net1.b{2}=deal(net2.b{2});
 
 %training and simulation
 %setting the number of epochs for the training as 1
 net1.trainParam.epochs=1;  
 net2.trainParam.epochs=1;
-net3.trainParam.epochs=1;
 
 %train the networks
 tic
@@ -47,17 +44,12 @@ tic
 net2=train(net2,p,t);
 net2_time_1=toc;
 
-tic
-net3=train(net3,p,t);
-net3_time_1=toc;
-
-training_time_1=[net1_time_1,net2_time_1,net3_time_1];
-a11=sim(net1,xtest1); a21=sim(net2,xtest1);a31=sim(net3,xtest1); % simulate the networks with the input vector p
+training_time_1=[net1_time_1,net2_time_1];
+a11=sim(net1,xtest1); a21=sim(net2,xtest1); % simulate the networks with the input vector p
 
 %Setting the epoch to 14 for all the networks
 net1.trainParam.epochs=14;
 net2.trainParam.epochs=14;
-net3.trainParam.epochs=14;
 
 tic
 net1=train(net1,p,t);
@@ -67,17 +59,12 @@ tic
 net2=train(net2,p,t);
 net2_time_14=toc;
 
-tic
-net3=train(net3,p,t);
-net3_time_14=toc;
-
-training_time_14=[net1_time_14,net2_time_14,net3_time_14];
-a12=sim(net1,xtest1); a22=sim(net2,xtest1);a32=sim(net3,xtest1);
+training_time_14=[net1_time_14,net2_time_14];
+a12=sim(net1,xtest1); a22=sim(net2,xtest1);
 
 %For Epochs = 985
 net1.trainParam.epochs=985;
 net2.trainParam.epochs=985;
-net3.trainParam.epochs=985;
 
 tic
 [net1,tr]=train(net1,p,t);
@@ -91,36 +78,29 @@ net2_time_985=toc;
 mse_2_985=tr.perf;
 len_2_985=length(mse_2_985);
 
-tic
-[net3,tr]=train(net3,p,t);
-net3_time_985=toc;
-mse_3_985=tr.perf;
-len_3_985=length(mse_3_985);
-
-
-training_time_985=[net1_time_985,net2_time_985,net3_time_985];
-plot(1:len_1_985,mse_1_985,1:len_2_985,mse_2_985,1:len_3_985,mse_3_985)
-legend('trainlm','traingd','trainbfg');
+training_time_985=[net1_time_985,net2_time_985];
+plot(1:len_1_985,mse_1_985,1:len_2_985,mse_2_985)
+legend('trainlm','trainbr');
 xlabel('Epoch');
 ylabel('Performance measure - MSE');
-a13=sim(net1,xtest1); a23=sim(net2,xtest1);a33=sim(net3,xtest1);
+a13=sim(net1,xtest1); a23=sim(net2,xtest1);
 
 % Curve fitting plots
 f1=figure;
 subplot(3,2,1);
-plot(x,y,'bx',xtest,cell2mat(a11),'r',xtest,cell2mat(a21),'g',xtest,cell2mat(a31),'y'); % plot the sine function and the output of the networks
+plot(x,y,'bx',xtest,cell2mat(a11),'r',xtest,cell2mat(a21),'g'); % plot the sine function and the output of the networks
 title('1 epoch');
-legend('target','trainlm','traingd','trainbfg');
+legend('target','trainlm','trainbr');
 
 subplot(3,2,3); 
-plot(x,y,'bx',xtest,cell2mat(a12),'r',xtest,cell2mat(a22),'g',xtest,cell2mat(a32),'y');
+plot(x,y,'bx',xtest,cell2mat(a12),'r',xtest,cell2mat(a22),'g');
 title('15 epochs');
-legend('target','trainlm','traingd','trainbfg');
+legend('target','trainlm','trainbr');
 
 subplot(3,2,5);
-plot(x,y,'bx',xtest,cell2mat(a13),'r',xtest,cell2mat(a23),'g',xtest,cell2mat(a33),'y');
+plot(x,y,'bx',xtest,cell2mat(a13),'r',xtest,cell2mat(a23),'g');
 title('1000 epochs');
-legend('target','trainlm','traingd','trainbfg');
+legend('target','trainlm','trainbr');
 xlabel('Input values - p','FontSize',10)
 
 % R Value plots
@@ -135,38 +115,27 @@ subplot(3,3,2);
 [m,b,r]=postregm(cell2mat(a21),ytest);
 epoch_1_r=[epoch_1_r,r*r];
 
-subplot(3,3,3);
-[m,b,r]=postregm(cell2mat(a31),ytest);
-epoch_1_r=[epoch_1_r,r*r];
-
 % For Epochs =14
 epoch_14_r=[];
-subplot(3,3,4);
+subplot(3,3,3);
 [m,b,r]=postregm(cell2mat(a12),ytest);
 epoch_14_r=[epoch_14_r,r*r];
 
-subplot(3,3,5);
+subplot(3,3,4);
 [m,b,r]=postregm(cell2mat(a22),ytest);
-epoch_14_r=[epoch_14_r,r*r];
-
-subplot(3,3,6);
-[m,b,r]=postregm(cell2mat(a32),ytest);
 epoch_14_r=[epoch_14_r,r*r];
 
 
 % For Epochs =985
 epoch_985_r=[];
-subplot(3,3,7);
+subplot(3,3,5);
 [m,b,r]=postregm(cell2mat(a13),ytest);
 epoch_985_r=[epoch_985_r,r*r];
 
-subplot(3,3,8);
+subplot(3,3,6);
 [m,b,r]=postregm(cell2mat(a23),ytest);
 epoch_985_r=[epoch_985_r,r*r];
 
-subplot(3,3,9);
-[m,b,r]=postregm(cell2mat(a33),ytest);
-epoch_985_r=[epoch_985_r,r*r];
 
 %Plotting the R^2 values
 epoch_r2=[epoch_1_r;epoch_14_r ; epoch_985_r]
@@ -180,6 +149,6 @@ ylabel('R^2 value')
 training_time=[training_time_1;training_time_14;training_time_985];
 figure;
 plot(training_time)
-legend('trainlm','traingd','trainbfg');
+legend('trainlm','trainbr');
 xlabel('Epochs')
 ylabel('Training time, second')
