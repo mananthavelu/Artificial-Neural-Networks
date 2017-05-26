@@ -11,11 +11,11 @@ true_labels = round(iris(:,end));
 
 %Training the SOM
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-x_length = 3;
-y_length = 1;
+x_length = 5;
+y_length = 5;
 gridsize=[y_length x_length];
 net = newsom(X',gridsize,'gridtop','linkdist');
-net.trainParam.epochs = 1000;
+net.trainParam.epochs = 50;
 net = train(net,X');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
