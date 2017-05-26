@@ -1,7 +1,6 @@
 %A script to test if 2d Hopfield network can recognize letter of alphabet
 
 
-
 function [] = hopdigit_v2(noiselevel,num_iter)
 
 % close all
@@ -65,7 +64,7 @@ end
 
 % Add noise to the digit maps
 
-noise = 5*maxx; % sd for Gaussian noise
+noise = 5*maxx; % sd for Gaussian noise (Input)
 
 Xn = X; 
 for i=1:N;
@@ -92,7 +91,7 @@ end
 %See if the network can correct the corrupted digits 
 
 
-num_steps = 10;
+num_steps = 100; %Input
 
 Xn = Xn';
 Tn = {Xn(:,index_dig)};
@@ -113,6 +112,4 @@ end
 hold on
 end
 
-
-%-----------------------------------------------------------------------
-
+end

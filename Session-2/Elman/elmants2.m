@@ -1,3 +1,4 @@
+
 % In this script an elman network is trained and tested in order to model a so called Hammerstein model. 
 % The system is described like this:
 
