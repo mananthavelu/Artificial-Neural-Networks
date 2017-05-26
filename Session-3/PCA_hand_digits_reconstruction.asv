@@ -56,7 +56,9 @@ cumEigVal_50=cumEigVal(1:50);
 
 
 figure;
-title('Reconstruction error vs  Principal components vs Cumsum')
+
+
+
 yyaxis left
 plot(1:50,Error)
 xlabel('Principal components')
@@ -64,5 +66,5 @@ ylabel('Reconstruction error')
 
 yyaxis right
 plot(1:50,cumEigVal_50')
-ylabel('Cumsum')
+ylable('Cumsum')
 
