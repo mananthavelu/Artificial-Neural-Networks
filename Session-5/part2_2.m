@@ -65,6 +65,7 @@ Yr=round(Yr,0);
 Y = resize(Yr,35,25,1/5);
 
 error=computeError(Y,T);
+disp(error)
 
 plotPatterns(T,'Original Characters');
 plotPatterns(distortedT,'Distorted Characters');
