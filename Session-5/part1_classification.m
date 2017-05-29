@@ -34,7 +34,7 @@ ccr = computeCCR(finalNN.net,Xtest,Ytest)
 figure,plotperform(finalNN.tr);
 
 % %% part 2:
-%Performing dimensionalityr reduction technique
+%Performing dimensionality reduction technique
 eigVect = PCA(Xtrain);
 
 hiddenUnits = [10 50 100];
@@ -53,7 +53,8 @@ end
 %[~,hid] = min(perf);
 [~, hid] = min(perf(:));
 [Nhid,Npca] = ind2sub(size(perf),hid);
-Npca+1
+disp(Npca)
+Npca+3
 finalNN = out(Nhid,Npca);
 ccr_PCA(Nhid,Npca)
 figure,plotperform(finalNN.tr);
