@@ -83,6 +83,7 @@ function [net,tr]= designNN(X,Y,totalHidden)
     net.layers{2}.transferFcn = 'softmax';
     net.performFcn ='crossentropy';
     [net,tr]=train(net,X,Y);
+    view(net)
 end
 
 function [ccr] = computeCCR(net,Xtest,Ytest)
