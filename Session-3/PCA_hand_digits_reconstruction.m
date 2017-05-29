@@ -12,7 +12,8 @@ ylabel('Eigen values');
 %Reconstruction of the data
 mu = mean(threes);
 figure;
-imagesc(reshape(mu(1,:),16,16),[0,1])
+colormap('gray')
+imagesc(reshape(mu(1,:),16,16),[0,1]);
 xhat = bsxfun(@minus,threes,mu); % subtract the mean
 
 %Constructed Original data
@@ -28,6 +29,7 @@ for i=1:4
         
     %Reconstructed image
     subplot(2,2,fig)
+    colormap('gray')
     imagesc(reshape(Xapprox(1,:),16,16),[0,1])
     title(i);
     xlim auto
