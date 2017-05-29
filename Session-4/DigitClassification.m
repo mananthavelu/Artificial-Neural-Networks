@@ -1,4 +1,4 @@
-clear all
+%clear all
 close all
 nntraintool('close');
 nnet.guis.closeAllViews();
@@ -10,7 +10,7 @@ rng('default')
 
 
 % Load the training data into memory
-[xTrainImages, tTrain] = digittrain_dataset;
+%[xTrainImages, tTrain] = digittrain_dataset;
 
 % Layer 1
 hiddenSize1 = 100;
@@ -48,7 +48,7 @@ deepnet = stack(autoenc1,autoenc2,softnet);
 imageWidth = 28;
 imageHeight = 28;
 inputSize = imageWidth*imageHeight;
-[xTestImages, tTest] = digittest_dataset;
+%[xTestImages, tTest] = digittest_dataset;
 xTest = zeros(inputSize,numel(xTestImages));
 for i = 1:numel(xTestImages)
     xTest(:,i) = xTestImages{i}(:);

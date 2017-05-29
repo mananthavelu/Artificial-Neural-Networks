@@ -53,8 +53,7 @@ end
 %[~,hid] = min(perf);
 [~, hid] = min(perf(:));
 [Nhid,Npca] = ind2sub(size(perf),hid);
-disp(Npca)
-Npca+3
+Npca+1
 finalNN = out(Nhid,Npca);
 ccr_PCA(Nhid,Npca)
 figure,plotperform(finalNN.tr);
