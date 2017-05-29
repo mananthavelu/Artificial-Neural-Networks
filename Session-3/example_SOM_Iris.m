@@ -4,9 +4,10 @@ close all
 
 %Load data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-iris= iris_dataset;
+%iris= iris_dataset;
+load iris.dat;
 X = iris(:,1:end-1);
-true_labels = round(iris(:,end)); 
+true_labels = iris(:,end); 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Training the SOM

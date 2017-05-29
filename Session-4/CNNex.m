@@ -232,9 +232,8 @@ title('First convolutional layer weights')
 % % design choice, but typically starting with the layer right before the
 % % classification layer is a good place to start. In |convnet|, the this
 % % layer is named 'fc7'. Let's extract training features using that layer.
-% featureLayer = 'fc7';
-% trainingFeatures = activations(convnet, trainingSet, featureLayer, ...
-%     'MiniBatchSize', 32, 'OutputAs', 'columns');
+featureLayer = 'fc7';
+trainingFeatures = activations(convnet, trainingSet, featureLayer,'MiniBatchSize', 32, 'OutputAs', 'columns');
 % %%
 % % Note that the activations are computed on the GPU and the 'MiniBatchSize'
 % % is set 32 to ensure that the CNN and image data fit into GPU memory.
@@ -251,13 +250,13 @@ title('First convolutional layer weights')
 % % vectors, which each have a length of 4096.
 % 
 % % Get training labels from the trainingSet
-% trainingLabels = trainingSet.Labels;
+trainingLabels = trainingSet.Labels;
 % 
 % % Train multiclass SVM classifier using a fast linear solver, and set
 % % 'ObservationsIn' to 'columns' to match the arrangement used for training
 % % features.
-% classifier = fitcecoc(trainingFeatures, trainingLabels, ...
-%     'Learners', 'Linear', 'Coding', 'onevsall', 'ObservationsIn', 'columns');
+classifier = fitcecoc(trainingFeatures, trainingLabels, ...
+     'Learners', 'Linear', 'Coding', 'onevsall', 'ObservationsIn', 'columns');
 % 
 % %% Evaluate Classifier
 % % Repeat the procedure used earlier to extract image features from
@@ -265,37 +264,37 @@ title('First convolutional layer weights')
 % % measure the accuracy of the trained classifier.
 % 
 % % Extract test features using the CNN
-% testFeatures = activations(convnet, testSet, featureLayer, 'MiniBatchSize',32);
+%testFeatures = activations(convnet, testSet, featureLayer, 'MiniBatchSize',32);
 % 
 % % Pass CNN image features to trained classifier
-% predictedLabels = predict(classifier, testFeatures);
+%predictedLabels = predict(classifier, testFeatures);
 % 
 % % Get the known labels
-% testLabels = testSet.Labels;
+%testLabels = testSet.Labels;
 % 
 % % Tabulate the results using a confusion matrix.
-% confMat = confusionmat(testLabels, predictedLabels);
+%confMat = confusionmat(testLabels, predictedLabels);
 % 
 % % Convert confusion matrix into percentage form
-% confMat = bsxfun(@rdivide,confMat,sum(confMat,2))
+%confMat = bsxfun(@rdivide,confMat,sum(confMat,2))
 % %%
 % 
 % % Display the mean accuracy
-% mean(diag(confMat))
+%mean(diag(confMat))
 % 
 % %% Try the Newly Trained Classifier on Test Images
 % % You can now apply the newly trained classifier to categorize new images.
-% newImage = fullfile(rootFolder, 'airplanes', 'image_0690.jpg');
+%newImage = fullfile(rootFolder, 'airplanes', 'image_0690.jpg');
 % 
 % % Pre-process the images as required for the CNN
-% img = readAndPreprocessImage(newImage);
+%img = readAndPreprocessImage(newImage);
 % 
 % % Extract image features using the CNN
-% imageFeatures = activations(convnet, img, featureLayer);
+%imageFeatures = activations(convnet, img, featureLayer);
 % %%
 % 
 % % Make a prediction using the classifier
-% label = predict(classifier, imageFeatures)
+%label = predict(classifier, imageFeatures)
 % 
 % 
 % %% References
@@ -318,3 +317,4 @@ title('First convolutional layer weights')
 % % for generic visual recognition." arXiv preprint arXiv:1310.1531 (2013).
 % 
 % displayEndOfDemoMessage(mfilename)
+disp("hey")
