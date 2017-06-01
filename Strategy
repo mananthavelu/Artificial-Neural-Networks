@@ -1,16 +1,13 @@
 
 Exercise-1 - Completed
 Exercise-2 - Completed
-Exercise-3 - Completed -SOM
-Exercise-4 - Stacked Encoder-Critical loading capacity 
-
+Exercise-3 - Completed
+Exercise-4 - Completed
+Exercise-5 - Completed
 
 4.Why Accuracy is different for Autoencoders? What adjustments are required.
 4. CNN-Watch the youtube Video. Interpret it for answering the questions
 
-Today
-ANN- 4 and Final - Part-1
-SVM-Exercise-1, Exercise-2, Exercise-3
 
 ANN
 
@@ -18,16 +15,28 @@ Ask raaam to run and send me the results for Exercise-5 - Part-1.1 regression an
 SOM-iris.dat
 
 
-SVM
-
-
-
+____________________________________________
 General:
+Font size-10 - Done
+Times New Roman-Done
 Figures names, uniformity
-Font size-10
-Times New Roman
-Section, Sub section numbers
-Check numbers for all the pages
+Section, Sub section names, numbers
+ 
+
 Clarity in sentences
 Grammerly
+Originality
+Appearance/Presentation, Overall Look
+
+
+Things to note and do during the exam
+_____________________________________________
+
+---------------------------------------------
+Unsupervised learning-SVM
+Kernel PCA
+Spectral Clustering
+Fixed Size LSSVM
+Nystr¨om approximation
+---------------------------------------------
 
