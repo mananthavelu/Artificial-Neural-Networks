@@ -1,10 +1,12 @@
 clear;
 clc;
 close all
+
 %Load the dataset
 load('Data_Problem1_regression.mat');
 
 %Create the target variables
+%Student Number : 0652832
 Tnew = (8*T1 + 6*T2 + 5*T3 +3*T4 + 2*T5)/(8+6+5+3+2);%r0652832 -> 8 6 5 3 2
 
 %Creating the dataset
@@ -42,19 +44,18 @@ figure,plotSurface([test(:,1) test(:,2) Tpred],'Surface of the Approximation');
 figure,plotperform(finalNN.tr);
 figure,plotregression(test(:,3)', Tpred', 'Test Set Correlations');
 
+%Designing the required network
 function [net,tr]= designNN(X,T,totalHidden)
     net = feedforwardnet(totalHidden);
     net.divideFcn ='divideind';
     net.divideParam.trainInd = 1:1000;
     net.divideParam.valInd = 1001:2000;
     net.divideParam.testInd = 2001:3000;
-    %net.trainParam.showWindow=0;
-    %net.trainParam.epochs=10000;
     net.layers{1}.transferFcn = 'tansig';
     net.layers{2}.transferFcn ='purelin';
     [net,tr]=train(net,X,T);
 end
-figure;
+%Plots
 function [fig] = plotSurface(data,type)
     X1 = data(:,1); X2 = data(:,2); T = data(:,3);
     F=scatteredInterpolant(X1,X2,T);

@@ -3,59 +3,60 @@ clc;
 setdemorandstream(8);
 
 patterns = getCharacterPatterns();
-%plotPatterns(patterns,'Character Dataset');
+plotPatterns(patterns,'Character Dataset');
 
-%%%%%%%%%%%%%%%%%%%%%% task 1: retrieve 5 patterns %%%%%%%%%%%%%%%%%%%%%%
-% T = patterns(1:5,:);
-% distortedT = getDistortedPattern(T);
-% 
-% net=newhop(T');
-% 
-% % test if original image can be reconstructed
-% [Y,~,~] = sim(net,{size(distortedT,1) 3},[],distortedT');
-% Y=Y{end}';
-% Y=round(Y,0);
-% 
-% error=computeError(Y,T);
-% 
-% plotPatterns(T,'Original Characters');
-% plotPatterns(distortedT,'Distorted Characters');
-% plotPatterns(Y,sprintf('Recollected Characters'));
+%Retrieval of 5 patterns
+
+ T = patterns(1:5,:);
+ distortedT = getDistortedPattern(T);
+ 
+ %Creation of Hopfield neural network
+ net=newhop(T');
+ 
+ % Original image reconstruction
+ [Y,~,~] = sim(net,{size(distortedT,1) 3},[],distortedT');
+ Y=Y{end}';
+ Y=round(Y,0);
+ 
+ error=computeError(Y,T);
+ 
+ plotPatterns(T,'Original Characters');
+ plotPatterns(distortedT,'Distorted Characters');
+ plotPatterns(Y,sprintf('Recollected Characters'));
 
 
-%%%%%%%%%%%%%%%%%%%%%% task 2: errors vs no. of patterns %%%%%%%%%%%%%%%%%%%%%%
-% noOfIter = 1;
-% errors = zeros(size(patterns,1),1);
-% 
-% for j=1:size(patterns,1)
-% 
-%     T = patterns(1:j,:);
-%     distortedT = getDistortedPattern(T);
-%     net=newhop(T');
-%     [Y,~,~] = sim(net,{size(distortedT,1) noOfIter},[],distortedT');
-%     Y=Y{end}';
-%     Y=sign(Y);
-%     errors(j)=computeError(Y,T);
-% end
-%     
-% N = size(patterns,2);
-% cap = N/(4*log(N));
-% figure, plot(errors);
-% hold on
-% plot(round(cap),0.5,'r*');
-% xlabel('Number of Patterns');
-% ylabel('Number of Pixel Errors');
-% title('Hopfield Network Storage Capacity');
-% hold off
+%Error vs Number of patterns
+ noOfIter = 1;
+ errors = zeros(size(patterns,1),1);
+ 
+ for j=1:size(patterns,1)
+ 
+     T = patterns(1:j,:);
+     distortedT = getDistortedPattern(T);
+     net=newhop(T');
+     [Y,~,~] = sim(net,{size(distortedT,1) noOfIter},[],distortedT');
+     Y=Y{end}';
+     Y=sign(Y);
+     errors(j)=computeError(Y,T);
+ end
 
-%%%%%%%%%%%%%%%%%%%%% task 3: retrieve 25 patterns  %%%%%%%%%%%%%%%%%%%%%%
+ 
+ N = size(patterns,2);
+ cap = N/(4*log(N));
+ figure, plot(errors);
+ hold on
+ plot(round(cap),0.5,'r*');
+ xlabel('Number of Patterns');
+ ylabel('Number of Pixel Errors');
+ title('Hopfield Network Storage Capacity');
+ hold off
+
+%Retrieval of 25 patterns
 noOfIter = 30;
 T = patterns(1:25,:);
 Tr = resize(T,7,5,5);
-
 distortedT = getDistortedPattern(T);
 distortedTr = resize(distortedT,7,5,5);
-
 net=newhop(Tr');
 
 [Yr,~,~] = sim(net,{size(distortedTr,1) noOfIter},[],distortedTr');
@@ -112,105 +113,114 @@ function plotPatterns(patterns,titleStr)
         img(img==-1) = 0;
         allchars(:, index:(index+4))=img;
     end
-%     figure, imshow(allchars(:,1:60));
     figure,subplot(2,1,1), subimage(allchars(:,1:90));title(titleStr);
-    subplot(2,1,2), subimage(allchars(:,91:185));title(titleStr);
-    %subplot(3,1,3), subimage(allchars(:,121:180));   
+    subplot(2,1,2), subimage(allchars(:,91:185));title(titleStr);   
 end
 
 function patterns=getCharacterPatterns()
     patterns = zeros(37,35);
     
-    r =[0    0    0    0    0;
-        0    0    0    0    0;
-        0    1    1    1    0;
-        0    1    0    0    0;
-        0    1    0    0    0;
-        0    1    0    0    0;
-        0    1    0    0    0];
+     m = [0    0    0    0    0;
+         1    1    1    1    1;
+         1    0    1    0    1;
+         1    0    1    0    1;
+         1    0    1    0    1;
+         1    0    1    0    1;
+         1    0    1    0    1];
+ 
+ 
     
-    a =[0    0    0    0    0;
-        0    0    0    0    0;
-        0    1    1    1    0;
-        1    0    0    1    0;
-        1    0    0    1    0;
-        1    0    0    1    0;
-        1    1    1    1    1];
+ 
+    a = [0    0    0    0    0;
+         0    0    0    0    0;
+         0    1    1    1    0;
+         1    0    0    1    0;
+         1    0    0    1    0;
+         1    0    0    1    0;
+         1    1    1    1    1];
+ 
+     
+     
+    r = [0    0    0    0    0;
+         0    0    0    0    0;
+         0    1    1    1    0;
+         0    1    0    0    0;
+         0    1    0    0    0;
+         0    1    0    0    0;
+         0    1    0    0    0];
+ 
+     
+     
+     i = [0    0    0    0    0;
+         0    0    1    0    0;
+         0    0    0    0    0;
+         0    0    1    0    0;
+         0    0    1    0    0;
+         0    0    1    0    0;
+         0    0    1    0    0];
+     
+     
+     u = [0    0    0    0    0;
+         0    0    0    0    0;
+         0    1    0    1    0;
+         0    1    0    1    0;
+         0    1    0    1    0;
+         0    1    0    1    0;
+         0    1    1    1    0];
+     
+     
+     t = [0    1    0    0    0;
+         1    1    1    0    0;
+         0    1    0    0    0;
+         0    1    0    0    0;
+         0    1    0    0    0;
+         0    1    0    0    0;
+         0    1    1    0    0];
+     
+     h = [1    0    0    0    0;
+         1    0    0    0    0;
+         1    1    1    1    0;
+         1    0    0    1    0;
+         1    0    0    1    0;
+         1    0    0    1    0;
+         1    0    0    1    0];
+     n = [0    0    0    0    0;
+         0    0    0    0    0;
+         1    1    1    1    0;
+         1    0    0    1    0;
+         1    0    0    1    0;
+         1    0    0    1    0;
+         1    0    0    1    0];
+     
     
-    m =[0    0    0    0    0;
-        0    0    0    0    0;
-        0    1    0    1    0;
-        1    0    1    0    1;
-        1    0    1    0    1;
-        1    0    1    0    1;
-        1    0    1    0    1];
-    
-    v =[0    0    0    0    0;
-        0    0    0    0    0;
-        1    0    0    0    1;
-        1    0    0    0    1;
-        1    1    0    1    1;
-        0    1    0    1    0;
-        0    0    1    0    0];
-    
-    i =[0    0    1    0    0;
-        0    0    0    0    0;
-        0    0    1    0    0;
-        0    0    1    0    0;
-        0    0    1    0    0;
-        0    0    1    0    0;
-        0    0    1    0    0];
-    
-    n =[0    0    0    0    0;
-        0    0    0    0    0;
-        1    1    1    1    0;
-        1    0    0    1    0;
-        1    0    0    1    0;
-        1    0    0    1    0;
-        1    0    0    1    0];
-    
-    d =[0    0    0    1    0;
-        0    0    0    1    0;
-        1    1    1    1    0;
-        1    0    0    1    0;
-        1    0    0    1    0;
-        1    0    0    1    0;
-        1    1    1    1    1]; 
-    
-    o =[0    0    0    0    0;
-        0    0    0    0    0;
-        0    1    1    1    0;
-        0    1    0    1    0;
-        0    1    0    1    0;
-        0    1    0    1    0;
-        0    1    1    1    0];
-    
-    t =[0    1    0    0    0;
-        1    1    1    0    0;
-        0    1    0    0    0;
-        0    1    0    0    0;
-        0    1    0    0    0;
-        0    1    0    0    0;
-        0    1    1    0    0];
-    
-    h =[1    0    0    0    0;
-        1    0    0    0    0;
-        1    1    1    1    0;
-        1    0    0    1    0;
-        1    0    0    1    0;
-        1    0    0    1    0;
-        1    0    0    1    0];
-    
-    l =[0    0    1    0    0;
-        0    0    1    0    0;
-        0    0    1    0    0;
-        0    0    1    0    0;
-        0    0    1    0    0;
-        0    0    1    0    0;
-        0    0    1    1    0];
-    
+    v = [0    0    0    0    0;
+         0    0    0    0    0;
+         1    0    0    0    1;
+         1    0    0    0    1;
+         1    1    0    1    1;
+         0    1    0    1    0;
+         0    0    1    0    0];
+ 
+    e = [0    0    0    0    0;
+         0    0    0    0    0;
+         1    1    1    1    0;
+         1    0    0    1    0;
+         1    1    1    1    0;
+         1    0    0    0    0;
+         1    1    1    1    0];
+ 
+  
+    l = [1    0    0    0    0;
+         1    0    0    0    0;
+         1    0    0    0    0;
+         1    0    0    0    0;
+         1    0    0    0    0;
+         1    0    0    0    0;
+         1    1    1    1    0];
+ 
+     
     %Lowercase Letters
-    lowerchars = [r a m v i n d o t h l];
+    lowerchars = [m a r i u t h n v e l];
     
     %Uppercase Letters
     chars = prprob;
@@ -222,7 +232,7 @@ function patterns=getCharacterPatterns()
     end
         allchars = [lowerchars upperchars];
         
-    %Make Pattern Vectors
+    %Making Pattern Vectors
     for i=0:5:180
         index = round(i/5,0)+1;
         image = double(allchars(:,((i+1):(i+5))));

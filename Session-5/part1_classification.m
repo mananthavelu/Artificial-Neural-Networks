@@ -5,13 +5,13 @@ setdemorandstream(8);
 dataset = importdata('winequality-white.csv');
 
 %Creating the classes for the given dataset
+%Student No: 0652832
 reqIndex = (dataset.data(:,12)==5 | dataset.data(:,12)==7);
 Xdata=dataset.data(reqIndex,1:(end-1))';
 Y=dataset.data(reqIndex,end);
 Y(Y~=7) = 0;
 Y(Y==7) = 1;
 Ydata = Y';
-%Ydata = [Y ~Y]';
 
 [trainInd,~,testInd] = dividerand(size(Xdata,2),0.8,0,0.20);
 
@@ -33,12 +33,10 @@ finalNN = out(hid);
 ccr = computeCCR(finalNN.net,Xtest,Ytest)
 figure,plotperform(finalNN.tr);
 
-% %% part 2:
 %Performing dimensionality reduction technique
 eigVect = PCA(Xtrain);
 
 hiddenUnits = [10 50 100];
-%perf = zeros( size(Xtrain,1) * max(size(hiddenUnits)),1);
 
 for j=2:size(Xtrain,1)
     for i=1:max(size(hiddenUnits))
@@ -50,7 +48,6 @@ for j=2:size(Xtrain,1)
         ccr_PCA(i,j-1) = computeCCR(out(i,j-1).net,rXtest,Ytest);
     end
 end
-%[~,hid] = min(perf);
 [~, hid] = min(perf(:));
 [Nhid,Npca] = ind2sub(size(perf),hid);
 Npca+1
@@ -59,7 +56,7 @@ ccr_PCA(Nhid,Npca)
 figure,plotperform(finalNN.tr);
 
 
-%% function %%
+%% functions %%
 
 function [rXtrain,rXtest] = reconstruct(Xtrain,Xtest,W,nc)
     X = Xtrain';
@@ -83,7 +80,6 @@ function [net,tr]= designNN(X,Y,totalHidden)
     net.layers{2}.transferFcn = 'softmax';
     net.performFcn ='crossentropy';
     [net,tr]=train(net,X,Y);
-    view(net)
 end
 
 function [ccr] = computeCCR(net,Xtest,Ytest)
@@ -104,7 +100,6 @@ function eigVect = PCA(Xtrain)
     eigVect = eigVect(:,IDX);
     
     figure, hold on;
-    %cum = cumsum(eigVal);
     plot(eigVal);
     xlabel('Index');
     ylabel('Eigenvalue');

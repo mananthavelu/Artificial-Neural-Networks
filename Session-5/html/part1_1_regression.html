@@ -1,0 +1,223 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>part1_1_regression</title><meta name="generator" content="MATLAB 9.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-02"><meta name="DC.source" content="part1_1_regression.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput">clear;
+clc;
+close <span class="string">all</span>
+
+<span class="comment">%Load the dataset</span>
+load(<span class="string">'Data_Problem1_regression.mat'</span>);
+
+<span class="comment">%Create the target variables</span>
+<span class="comment">%Student Number : 0652832</span>
+Tnew = (8*T1 + 6*T2 + 5*T3 +3*T4 + 2*T5)/(8+6+5+3+2);<span class="comment">%r0652832 -&gt; 8 6 5 3 2</span>
+
+<span class="comment">%Creating the dataset</span>
+data = [X1 X2 Tnew];
+
+<span class="comment">%Split the dataset into Training, Validation and Testing data by randomly</span>
+<span class="comment">%sampling with replacement</span>
+train = datasample(data,1000);
+val = datasample(data,1000);
+test = datasample(data,1000);
+
+<span class="comment">%Surface plots for the training, validation and testing data</span>
+figure, plotSurface(train,<span class="string">'Training Set Surface'</span>);
+figure, plotSurface(val,<span class="string">'Validation Set Surface'</span>);
+figure, plotSurface(test,<span class="string">'Test Set Surface'</span>);
+
+<span class="comment">%Splitting into training, validation and test data</span>
+Xdata = [train(:,1) train(:,2);val(:,1) val(:,2);test(:,1) test(:,2)]';
+Tdata = [train(:,3);val(:,3);test(:,3)]';
+
+
+hiddenUnits = [10 50 100];
+perf = zeros(max(size(hiddenUnits)),1);
+
+<span class="keyword">for</span> i=1:max(size(hiddenUnits))
+    [out(i).net, out(i).tr] = designNN(Xdata,Tdata,hiddenUnits(i));
+    perf(i) = out(i).tr.best_vperf;
+<span class="keyword">end</span>
+[~,hid] = min(perf);
+finalNN = out(hid);
+
+Tpred = sim(finalNN.net,[test(:,1) test(:,2)]')';
+
+figure,plotSurface([test(:,1) test(:,2) Tpred],<span class="string">'Surface of the Approximation'</span>);
+figure,plotperform(finalNN.tr);
+figure,plotregression(test(:,3)', Tpred', <span class="string">'Test Set Correlations'</span>);
+
+<span class="comment">%Designing the required network</span>
+<span class="keyword">function</span> [net,tr]= designNN(X,T,totalHidden)
+    net = feedforwardnet(totalHidden);
+    net.divideFcn =<span class="string">'divideind'</span>;
+    net.divideParam.trainInd = 1:1000;
+    net.divideParam.valInd = 1001:2000;
+    net.divideParam.testInd = 2001:3000;
+    net.layers{1}.transferFcn = <span class="string">'tansig'</span>;
+    net.layers{2}.transferFcn =<span class="string">'purelin'</span>;
+    [net,tr]=train(net,X,T);
+<span class="keyword">end</span>
+<span class="comment">%Plots</span>
+<span class="keyword">function</span> [fig] = plotSurface(data,type)
+    X1 = data(:,1); X2 = data(:,2); T = data(:,3);
+    F=scatteredInterpolant(X1,X2,T);
+
+    [X,Y]=meshgrid(min(X1):0.01:max(X1),min(X2):0.01:max(X2));
+    Z = F(X,Y);
+    fig = surfc(X,Y,Z);
+    xlabel(<span class="string">'X_1'</span>);
+    ylabel(<span class="string">'X_2'</span>);
+    zlabel(<span class="string">'T'</span>);
+    title(type);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput error">Error using regression
+Too many input arguments.
+
+Error in plotregression&gt;update_plot (line 358)
+    [r,m,b] = regression(t,y);
+
+Error in plotregression (line 110)
+      plotData = update_plot(param,fig,plotData,update_args{:});
+
+Error in part1_1_regression (line 45)
+figure,plotregression(test(:,3)', Tpred', 'Test Set Correlations');
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+clear;
+clc;
+close all
+
+%Load the dataset
+load('Data_Problem1_regression.mat');
+
+%Create the target variables
+%Student Number : 0652832
+Tnew = (8*T1 + 6*T2 + 5*T3 +3*T4 + 2*T5)/(8+6+5+3+2);%r0652832 -> 8 6 5 3 2
+
+%Creating the dataset
+data = [X1 X2 Tnew];
+
+%Split the dataset into Training, Validation and Testing data by randomly
+%sampling with replacement
+train = datasample(data,1000);
+val = datasample(data,1000);
+test = datasample(data,1000);
+
+%Surface plots for the training, validation and testing data
+figure, plotSurface(train,'Training Set Surface');
+figure, plotSurface(val,'Validation Set Surface');
+figure, plotSurface(test,'Test Set Surface');
+
+%Splitting into training, validation and test data
+Xdata = [train(:,1) train(:,2);val(:,1) val(:,2);test(:,1) test(:,2)]';
+Tdata = [train(:,3);val(:,3);test(:,3)]';
+
+
+hiddenUnits = [10 50 100];
+perf = zeros(max(size(hiddenUnits)),1);
+
+for i=1:max(size(hiddenUnits))
+    [out(i).net, out(i).tr] = designNN(Xdata,Tdata,hiddenUnits(i));
+    perf(i) = out(i).tr.best_vperf;
+end
+[~,hid] = min(perf);
+finalNN = out(hid);
+
+Tpred = sim(finalNN.net,[test(:,1) test(:,2)]')';
+
+figure,plotSurface([test(:,1) test(:,2) Tpred],'Surface of the Approximation');
+figure,plotperform(finalNN.tr);
+figure,plotregression(test(:,3)', Tpred', 'Test Set Correlations');
+
+%Designing the required network
+function [net,tr]= designNN(X,T,totalHidden)
+    net = feedforwardnet(totalHidden);
+    net.divideFcn ='divideind';
+    net.divideParam.trainInd = 1:1000;
+    net.divideParam.valInd = 1001:2000;
+    net.divideParam.testInd = 2001:3000;
+    net.layers{1}.transferFcn = 'tansig';
+    net.layers{2}.transferFcn ='purelin';
+    [net,tr]=train(net,X,T);
+end
+%Plots
+function [fig] = plotSurface(data,type)
+    X1 = data(:,1); X2 = data(:,2); T = data(:,3);
+    F=scatteredInterpolant(X1,X2,T);
+
+    [X,Y]=meshgrid(min(X1):0.01:max(X1),min(X2):0.01:max(X2));
+    Z = F(X,Y);
+    fig = surfc(X,Y,Z);
+    xlabel('X_1');
+    ylabel('X_2');
+    zlabel('T');
+    title(type);
+end
+##### SOURCE END #####
+--></body></html>
